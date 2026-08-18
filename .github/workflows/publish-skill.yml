@@ -175,7 +175,7 @@ jobs:
               "$base/registry/v1/registry.json" -o /tmp/registry.json && \
               curl --fail --silent --show-error --retry 2 --retry-all-errors \
               "$base/schemas/registry-v1.schema.json" -o /tmp/registry-schema.json; then
-              jq -e '.title == "EchoSkillHub registry v1"' /tmp/registry-schema.json >/dev/null
+              jq -e '.title == "EchoSkillHub Registry v1"' /tmp/registry-schema.json >/dev/null
               while IFS=$'\t' read -r url size digest; do
                 curl --fail --silent --show-error --location --retry 2 --retry-all-errors "$url" -o /tmp/skill.zip
                 test "$(stat -c%s /tmp/skill.zip)" = "$size"
