@@ -34,6 +34,7 @@ test('publish workflow gates untrusted event and separates release, registry, Pa
   assert.match(workflow, /prepare:[\s\S]*?permissions:\s*\n\s*contents: read/);
   assert.match(workflow, /release:[\s\S]*?permissions:\s*\n\s*contents: write/);
   assert.match(workflow, /registry:[\s\S]*?permissions:\s*\n\s*contents: read/);
+  assert.match(workflow, /pages:\s*[\s\S]*?if: always\(\) && needs\.registry\.result == 'success'/);
   assert.match(workflow, /pages:[\s\S]*?permissions:\s*\n\s*pages: write\s*\n\s*id-token: write/);
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /"governance\/\*\*"/);
