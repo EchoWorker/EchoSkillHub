@@ -63,6 +63,14 @@ export async function buildRegistry({ api = new GitHubApi(), fixtures, governanc
       existing.versions.push(version); existing.manifests.push(manifest);
     } else grouped.set(record.slug, { manifests: [manifest], versions: [version] });
   }
+  for (const [slug, rule] of Object.entries(governance.skills ?? {})) {
+    const group = grouped.get(slug);
+    if (!group) throw new Error(`${slug}: orphan governance override has no published release`);
+    const published = new Set(group.versions.map(v => v.version));
+    for (const version of Object.keys(rule.versions ?? {})) {
+      if (!published.has(version)) throw new Error(`${slug}@${version}: orphan governance override has no published release`);
+    }
+  }
   const skills = [...grouped.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([slug, group]) => {
     if (new Set(group.versions.map(v => v.version)).size !== group.versions.length) throw new Error(`${slug}: duplicate version`);
     const state = applyStatus(slug, group.versions, governance);

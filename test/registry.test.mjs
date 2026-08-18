@@ -52,6 +52,13 @@ test('registry builder rejects non-canonical URL and asset size mismatch', async
   await assert.rejects(buildRegistry({ ...badSize, generatedAt }), /asset size mismatch/);
 });
 
+test('registry builder rejects orphan governance overrides', async t => {
+  const missingSkill = await writeRegistryFixtures(t, [{ version: '1.0.0' }], { schemaVersion: 1, skills: { ghost: { status: 'deprecated', statusReason: 'No release exists.' } } });
+  await assert.rejects(buildRegistry({ ...missingSkill, generatedAt }), /ghost: orphan governance override/);
+  const missingVersion = await writeRegistryFixtures(t, [{ version: '1.0.0' }], { schemaVersion: 1, skills: { 'test-skill': { versions: { '2.0.0': 'revoked' } } } });
+  await assert.rejects(buildRegistry({ ...missingVersion, generatedAt }), /test-skill@2\.0\.0: orphan governance override/);
+});
+
 test('registry builder rejects invalid embedded manifest', async t => {
   const bytes = await releaseZip({ manifest: { forbiddenRuntime: 'host-specific' } });
   const paths = await writeRegistryFixtures(t, [{ bytes }]);

@@ -36,6 +36,8 @@ test('publish workflow gates untrusted event and separates release, registry, Pa
   assert.match(workflow, /registry:[\s\S]*?permissions:\s*\n\s*contents: read/);
   assert.match(workflow, /pages:\s*[\s\S]*?if: always\(\) && needs\.registry\.result == 'success'/);
   assert.match(workflow, /pages:[\s\S]*?permissions:\s*\n\s*pages: write\s*\n\s*id-token: write/);
+  assert.match(workflow, /cp -R schemas _site\/schemas/);
+  assert.match(workflow, /Public deployment smoke test[\s\S]*?registry\/v1\/registry\.json[\s\S]*?schemas\/registry-v1\.schema\.json/);
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /"governance\/\*\*"/);
   assert.match(workflow, /needs\.release\.result == 'skipped'/);
