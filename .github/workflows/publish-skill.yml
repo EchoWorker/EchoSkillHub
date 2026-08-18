@@ -148,7 +148,7 @@ jobs:
           path: _site
 
   pages:
-    if: needs.registry.result == 'success'
+    if: always() && needs.registry.result == 'success'
     needs: [registry]
     runs-on: ubuntu-latest
     environment:
