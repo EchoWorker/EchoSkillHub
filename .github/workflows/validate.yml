@@ -1,0 +1,58 @@
+name: Validate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    paths:
+      - "skills/**"
+      - "governance/**"
+      - "schemas/**"
+      - "scripts/**"
+      - "test/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request merge
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Validate labels and changed skills
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { getChangedSkills } from './scripts/changed-skills.mjs';
+          import { validateSkill, validateVersionLabels } from './scripts/validate.mjs';
+          const labels = JSON.parse(process.env.PR_LABELS);
+          const slugs = await getChangedSkills({ before: process.env.BASE_SHA, after: process.env.HEAD_SHA });
+          if (slugs.length) validateVersionLabels(labels);
+          for (const slug of slugs) await validateSkill(`skills/${slug}`);
+          console.log(`validated ${slugs.length} changed skill(s)`);
+          NODE
+
+      - name: Run test suite
+        run: npm test
+
+      - name: Run repository checks
+        run: npm run lint:md && node scripts/validate.mjs --all && node scripts/check-registry.mjs registry/v1/registry.json
