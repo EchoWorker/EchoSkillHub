@@ -175,20 +175,12 @@ jobs:
               "$base/registry/v1/registry.json" -o /tmp/registry.json && \
               curl --fail --silent --show-error --retry 2 --retry-all-errors \
               "$base/schemas/registry-v1.schema.json" -o /tmp/registry-schema.json; then
-              node --input-type=module <<'NODE'
-              import { readFile } from 'node:fs/promises';
-              import { createHash } from 'node:crypto';
-              const registry = JSON.parse(await readFile('/tmp/registry.json', 'utf8'));
-              const schema = JSON.parse(await readFile('/tmp/registry-schema.json', 'utf8'));
-              if (schema.title !== 'EchoSkillHub registry v1') throw new Error('unexpected public schema');
-              for (const skill of registry.skills) for (const version of skill.versions) {
-                const response = await fetch(version.downloadUrl);
-                if (!response.ok) throw new Error(`${version.downloadUrl}: HTTP ${response.status}`);
-                const bytes = Buffer.from(await response.arrayBuffer());
-                if (bytes.length !== version.size) throw new Error(`${version.downloadUrl}: size mismatch`);
-                if (createHash('sha256').update(bytes).digest('hex') !== version.sha256) throw new Error(`${version.downloadUrl}: digest mismatch`);
-              }
-              NODE
+              jq -e '.title == "EchoSkillHub registry v1"' /tmp/registry-schema.json >/dev/null
+              while IFS=$'\t' read -r url size digest; do
+                curl --fail --silent --show-error --location --retry 2 --retry-all-errors "$url" -o /tmp/skill.zip
+                test "$(stat -c%s /tmp/skill.zip)" = "$size"
+                test "$(sha256sum /tmp/skill.zip | cut -d' ' -f1)" = "$digest"
+              done < <(jq -r '.skills[].versions[] | [.downloadUrl, (.size | tostring), .sha256] | @tsv' /tmp/registry.json)
               exit 0
             fi
             sleep 10
