@@ -93,6 +93,7 @@ asset: <slug>-<version>.zip
 
 - [English README](README.md)
 - [贡献指南](CONTRIBUTING.md)
+- [第三方接入指南](docs/THIRD_PARTY_INTEGRATION.md)
 - [分类与标签契约](docs/CATEGORY_TAGS_DESIGN.md)
 - [仓库设计](docs/DESIGN.md)
 - [安全策略](SECURITY.md)
