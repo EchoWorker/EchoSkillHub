@@ -19,7 +19,7 @@ Audit links without modifying files unless the user asks for fixes.
 ## Workflow
 
 1. Identify the Markdown files in scope.
-2. Extract inline links, reference-style links, images, and local anchors.
+2. Extract inline links, reference-style links, images, and local anchors. Record the source line for every finding so the user can act on it immediately.
 3. Resolve relative paths from the directory containing each Markdown file.
 4. Check local targets first:
    - Report missing files and directories.
