@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
-    "lint:md": "markdownlint-cli2 README.md README.zh-CN.md CONTRIBUTING.md SECURITY.md docs/DESIGN.md docs/CATEGORY_TAGS_DESIGN.md docs/REPOSITORY_SETTINGS.md .github/*.md test/fixtures/skills/*/SKILL.md",
+    "lint:md": "markdownlint-cli2 README.md README.zh-CN.md CONTRIBUTING.md SECURITY.md docs/DESIGN.md docs/CATEGORY_TAGS_DESIGN.md docs/THIRD_PARTY_INTEGRATION.md docs/REPOSITORY_SETTINGS.md .github/*.md test/fixtures/skills/*/SKILL.md",
     "validate": "node scripts/validate.mjs",
     "package-skill": "node scripts/package-skill.mjs",
     "publish-skill": "node scripts/publish-skill.mjs",

@@ -99,6 +99,7 @@ certification. See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete policy.
 
 - [中文说明](README.zh-CN.md)
 - [Contribution guide](CONTRIBUTING.md)
+- [Third-party integration guide](docs/THIRD_PARTY_INTEGRATION.md)
 - [Category and tag contract](docs/CATEGORY_TAGS_DESIGN.md)
 - [Repository design](docs/DESIGN.md)
 - [Security policy](SECURITY.md)
