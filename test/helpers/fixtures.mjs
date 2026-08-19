@@ -19,7 +19,8 @@ export async function makeSkill(t, { slug = 'test-skill', frontmatter = {}, body
   const parent = await tempDir(t);
   const dir = path.join(parent, slug);
   await mkdir(dir, { recursive: true });
-  const data = { name: slug, description: 'A test skill.', ...frontmatter };
+  const metadata = { category: 'developer-tools', tags: 'testing', ...(frontmatter.metadata ?? {}) };
+  const data = { name: slug, description: 'A test skill.', ...frontmatter, metadata };
   await writeFile(path.join(dir, 'SKILL.md'), `---\n${YAML.stringify(data).trimEnd()}\n---\n\n${body}`);
   if (license) await writeFile(path.join(dir, 'LICENSE'), 'MIT License\n');
   for (const [name, value] of Object.entries(files)) {
@@ -31,7 +32,12 @@ export async function makeSkill(t, { slug = 'test-skill', frontmatter = {}, body
 
 export async function releaseZip({ slug = 'test-skill', version = '1.0.0', manifest = {}, extra = {} } = {}) {
   const zip = new JSZip();
-  const value = { schemaVersion: 1, slug, name: slug, version, description: 'A test skill.', license: 'MIT', homepage: `${REPOSITORY}/tree/main/skills/${slug}`, ...manifest };
+  const value = {
+    schemaVersion: 1, slug, name: slug, version, description: 'A test skill.',
+    category: 'developer-tools', tags: ['testing'],
+    license: 'MIT', metadata: { category: 'developer-tools', tags: 'testing' },
+    homepage: `${REPOSITORY}/tree/main/skills/${slug}`, ...manifest
+  };
   zip.file('manifest.json', `${JSON.stringify(value)}\n`);
   for (const [name, contents] of Object.entries(extra)) zip.file(name, contents);
   return zip.generateAsync({ type: 'nodebuffer' });

@@ -12,28 +12,37 @@
     "skills": { "type": "array", "maxItems": 10000, "items": { "$ref": "#/$defs/skill" } }
   },
   "$defs": {
+    "slug": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+    "category": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 32 },
+    "tag": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 32 },
+    "tags": { "type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": { "$ref": "#/$defs/tag" } },
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
     "status": { "enum": ["active", "deprecated", "revoked"] },
     "version": {
       "type": "object", "additionalProperties": false,
       "required": ["version", "publishedAt", "sourceCommit", "downloadUrl", "sha256", "size", "status"],
       "properties": {
-        "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
+        "version": { "$ref": "#/$defs/semver" },
         "publishedAt": { "type": "string", "format": "date-time" },
         "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
-        "downloadUrl": { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 2048 },
+        "downloadUrl": { "$ref": "#/$defs/downloadUrl" },
         "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
         "size": { "type": "integer", "minimum": 1, "maximum": 52428800 },
         "status": { "$ref": "#/$defs/status" }
       }
     },
+    "downloadUrl": { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 2048 },
     "skill": {
       "type": "object", "additionalProperties": false,
-      "required": ["slug", "name", "description", "status", "versions"],
+      "required": ["slug", "name", "description", "category", "tags", "status", "versions"],
       "properties": {
-        "slug": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
-        "name": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+        "slug": { "$ref": "#/$defs/slug" },
+        "name": { "$ref": "#/$defs/slug" },
         "description": { "type": "string", "minLength": 1, "maxLength": 1024, "pattern": "^\\S(?:[\\s\\S]*\\S)?$" },
-        "latest": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+        "category": { "$ref": "#/$defs/category" },
+        "tags": { "$ref": "#/$defs/tags" },
+        "latest": { "$ref": "#/$defs/semver" },
+        "downloadUrl": { "$ref": "#/$defs/downloadUrl" },
         "status": { "$ref": "#/$defs/status" },
         "statusReason": { "type": "string", "minLength": 1, "maxLength": 500 },
         "platforms": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["windows", "macos", "linux"] } },
@@ -42,22 +51,12 @@
         "metadata": { "type": "object", "additionalProperties": { "type": "string" } },
         "allowedTools": { "type": "string", "pattern": "^[^,\\t\\r\\n ]+(?: [^,\\t\\r\\n ]+)*$" },
         "versions": { "type": "array", "minItems": 1, "maxItems": 1000, "items": { "$ref": "#/$defs/version" } }
-      }
+      },
+      "dependentRequired": { "latest": ["downloadUrl"], "downloadUrl": ["latest"] },
+      "allOf": [
+        { "not": { "properties": { "name": { "type": "string", "pattern": "(?:^|-)(?:anthropic|claude)(?:-|$)" } }, "required": ["name"] } },
+        { "not": { "properties": { "description": { "type": "string", "pattern": "<[^>]*>" } }, "required": ["description"] } }
+      ]
     }
-  },
-  "allOf": [
-    {
-      "properties": {
-        "skills": {
-          "type": "array",
-          "items": {
-            "allOf": [
-              { "not": { "type": "object", "properties": { "name": { "type": "string", "pattern": "(?:^|-)(?:anthropic|claude)(?:-|$)" } }, "required": ["name"] } },
-              { "not": { "type": "object", "properties": { "description": { "type": "string", "pattern": "<[^>]*>" } }, "required": ["description"] } }
-            ]
-          }
-        }
-      }
-    }
-  ]
+  }
 }

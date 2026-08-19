@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "1970-01-01T00:00:00Z",
+  "categories": [
+    {
+      "slug": "automation",
+      "name": "Automation",
+      "nameZhCN": "自动化",
+      "description": "Scheduled, event-driven, and repetitive workflow automation.",
+      "order": 10,
+      "skillCount": 0
+    },
+    {
+      "slug": "business",
+      "name": "Business",
+      "nameZhCN": "商业",
+      "description": "Sales, finance, operations, and enterprise workflows.",
+      "order": 20,
+      "skillCount": 0
+    },
+    {
+      "slug": "communication",
+      "name": "Communication",
+      "nameZhCN": "沟通协作",
+      "description": "Email, messaging, meetings, and collaboration.",
+      "order": 30,
+      "skillCount": 0
+    },
+    {
+      "slug": "data",
+      "name": "Data",
+      "nameZhCN": "数据",
+      "description": "Data extraction, transformation, analysis, and visualization.",
+      "order": 40,
+      "skillCount": 0
+    },
+    {
+      "slug": "design",
+      "name": "Design",
+      "nameZhCN": "设计",
+      "description": "Visual, interface, brand, and creative design.",
+      "order": 50,
+      "skillCount": 0
+    },
+    {
+      "slug": "developer-tools",
+      "name": "Developer Tools",
+      "nameZhCN": "开发者工具",
+      "description": "Coding, testing, review, repositories, and documentation tooling.",
+      "order": 60,
+      "skillCount": 0
+    },
+    {
+      "slug": "documents",
+      "name": "Documents",
+      "nameZhCN": "文档",
+      "description": "Office, PDF, structured documents, and content publishing.",
+      "order": 70,
+      "skillCount": 0
+    },
+    {
+      "slug": "education",
+      "name": "Education",
+      "nameZhCN": "教育",
+      "description": "Teaching, learning, tutoring, and course workflows.",
+      "order": 80,
+      "skillCount": 0
+    },
+    {
+      "slug": "infrastructure",
+      "name": "Infrastructure",
+      "nameZhCN": "基础设施",
+      "description": "Cloud, deployment, observability, and system administration.",
+      "order": 90,
+      "skillCount": 0
+    },
+    {
+      "slug": "media",
+      "name": "Media",
+      "nameZhCN": "媒体",
+      "description": "Image, audio, video, animation, and media production.",
+      "order": 100,
+      "skillCount": 0
+    },
+    {
+      "slug": "productivity",
+      "name": "Productivity",
+      "nameZhCN": "效率工具",
+      "description": "Personal organization, planning, notes, and general productivity.",
+      "order": 110,
+      "skillCount": 0
+    },
+    {
+      "slug": "research",
+      "name": "Research",
+      "nameZhCN": "研究",
+      "description": "Search, synthesis, evidence gathering, and knowledge workflows.",
+      "order": 120,
+      "skillCount": 0
+    },
+    {
+      "slug": "security",
+      "name": "Security",
+      "nameZhCN": "安全",
+      "description": "Security review, compliance, privacy, and incident response.",
+      "order": 130,
+      "skillCount": 0
+    }
+  ]
+}
