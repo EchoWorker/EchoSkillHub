@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://echoworker.github.io/EchoSkillHub/schemas/tags-v1.schema.json",
+  "title": "EchoSkillHub Tags v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "tags"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "tags": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slug", "skillCount"],
+        "properties": {
+          "slug": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 32 },
+          "skillCount": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

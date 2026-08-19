@@ -6,6 +6,8 @@ compatibility: Requires Python 3.9 or later. Network access is optional and used
 metadata:
   author: EchoWorker
   version: "1.0"
+  category: developer-tools
+  tags: documentation,link-checking,markdown
   echoskillhub-platforms: windows,macos,linux
 allowed-tools: Read Grep
 ---

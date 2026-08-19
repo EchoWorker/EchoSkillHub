@@ -79,3 +79,27 @@ test('version labels require exactly one recognized bump', () => {
   assert.throws(() => validateVersionLabels(['major', 'patch']), /exactly one/);
   assert.throws(() => validateVersionLabels([{ name: 'bug' }]), /exactly one/);
 });
+
+
+test('mandatory category/tags reject missing, unknown, count, whitespace, duplicate, ordering, and invalid forms', async t => {
+  const cases = [
+    [{ metadata: { category: undefined } }, /category.*required/],
+    [{ metadata: { tags: undefined } }, /tags.*required/],
+    [{ metadata: { category: 'unknown-category' } }, /not in the category taxonomy/],
+    [{ metadata: { tags: '' } }, /tags.*required/],
+    [{ metadata: { tags: 'a,b,c,d,e,f,g,h,i' } }, /1-8 tags/],
+    [{ metadata: { tags: 'alpha, beta' } }, /no whitespace/],
+    [{ metadata: { tags: 'coding,coding' } }, /unique/],
+    [{ metadata: { tags: 'zulu,coding' } }, /ASCII sorted/],
+    [{ metadata: { tags: 'Bad_Tag' } }, /invalid metadata.tags/],
+    [{ metadata: { tags: 'developer-tools' } }, /forbidden/],
+    [{ metadata: { tags: 'ai' } }, /forbidden/],
+    [{ metadata: { tags: 'mit' } }, /license terms/],
+    [{ metadata: { tags: 'v2' } }, /version-looking/],
+    [{ metadata: { tags: 'windows' } }, /forbidden/]
+  ];
+  for (const [frontmatter, pattern] of cases) {
+    const dir = await makeSkill(t, { frontmatter });
+    await assert.rejects(validateSkill(dir), pattern);
+  }
+});

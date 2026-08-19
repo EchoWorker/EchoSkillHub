@@ -4,18 +4,25 @@
   "title": "EchoSkillHub generated package manifest v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "slug", "name", "version", "description", "homepage"],
+  "required": ["schemaVersion", "slug", "name", "version", "description", "category", "tags", "metadata", "homepage"],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "slug": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
-    "name": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
-    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
+    "slug": { "$ref": "#/$defs/slug" },
+    "name": { "$ref": "#/$defs/slug" },
+    "version": { "$ref": "#/$defs/semver" },
     "description": { "type": "string", "minLength": 1, "maxLength": 1024, "pattern": "^\\S(?:[\\s\\S]*\\S)?$" },
+    "category": { "$ref": "#/$defs/category" },
+    "tags": { "$ref": "#/$defs/tags" },
     "license": { "type": "string", "minLength": 1 },
     "compatibility": { "type": "string", "minLength": 1, "maxLength": 500 },
     "metadata": {
       "type": "object",
-      "additionalProperties": { "type": "string" }
+      "required": ["category", "tags"],
+      "additionalProperties": { "type": "string" },
+      "properties": {
+        "category": { "$ref": "#/$defs/category" },
+        "tags": { "type": "string", "minLength": 1 }
+      }
     },
     "allowedTools": { "type": "string", "pattern": "^[^,\\t\\r\\n ]+(?: [^,\\t\\r\\n ]+)*$" },
     "platforms": {
@@ -25,6 +32,13 @@
       "items": { "enum": ["windows", "macos", "linux"] }
     },
     "homepage": { "type": "string", "format": "uri", "pattern": "^https://" }
+  },
+  "$defs": {
+    "slug": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+    "category": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 32 },
+    "tag": { "type": "string", "pattern": "^(?!.*--)[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 32 },
+    "tags": { "type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": { "$ref": "#/$defs/tag" } },
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" }
   },
   "allOf": [
     { "not": { "properties": { "name": { "type": "string", "pattern": "(?:^|-)(?:anthropic|claude)(?:-|$)" } }, "required": ["name"] } },

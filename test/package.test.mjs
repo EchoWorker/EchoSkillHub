@@ -21,6 +21,9 @@ test('ZIP entries are sorted, rooted, normalized, and include generated manifest
   const manifest = JSON.parse(await zip.file('manifest.json').async('string'));
   assert.equal(manifest.version, '1.2.3');
   assert.equal(manifest.license, undefined);
+  assert.equal(manifest.category, 'developer-tools');
+  assert.deepEqual(manifest.tags, ['testing']);
+  assert.deepEqual(manifest.metadata, { category: 'developer-tools', tags: 'testing' });
   assert.equal(Object.hasOwn(manifest, 'platforms'), false);
   for (const entry of Object.values(zip.files)) {
     assert.equal(entry.date.toISOString(), '1980-01-01T00:00:00.000Z');
