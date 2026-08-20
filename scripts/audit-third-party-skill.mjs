@@ -56,8 +56,8 @@ export async function auditThirdPartySkill(skillDir) {
   const actual = []; const findings = [];
   for (const file of all) {
     if (file.relative === 'PROVENANCE.json' || file.relative === 'NOTICE') continue;
-    const bytes = await readFile(file.absolute); const hash = digest(bytes); const record = declared.get(file.relative);
-    if (!record || record.sha256 !== hash || record.size !== bytes.length) throw new Error(`${provenancePath}: hash mismatch or undeclared file: ${file.relative}`);
+    const bytes = await readFile(file.absolute); const canonical = Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n')); const hash = digest(bytes); const record = declared.get(file.relative);
+    if (!record || record.sha256 !== hash || record.size !== canonical.length) throw new Error(`${provenancePath}: hash mismatch or undeclared file: ${file.relative}`);
     if (file.relative === 'SKILL.md') {
       if (digest(skillBody(bytes)) !== record.bodySha256) throw new Error(`${provenancePath}: SKILL.md body differs from pinned upstream`);
       if (digest(skillBody(bytes)) !== expectedSource.skillBodySha256) throw new Error(`${provenancePath}: SKILL.md body differs from trusted upstream catalog`);
