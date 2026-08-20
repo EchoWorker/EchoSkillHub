@@ -11,12 +11,12 @@ const SUSPICIOUS = [
   ['credential access', /\b(?:API[_ -]?KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL)\b/i],
   ['environment access', /\b(?:os\.environ|process\.env|\$env:|Get-ChildItem\s+Env:)\b/i]
 ];
-const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+const digest = bytes => createHash('sha256').update(Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n'))).digest('hex');
 function skillBody(bytes) {
   const text = bytes.toString('utf8');
   const match = /^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/.exec(text);
   if (!match) throw new Error('SKILL.md has no frontmatter');
-  return Buffer.from(text.slice(match[0].length));
+  return Buffer.from(text.slice(match[0].length).replace(/\r\n/g, '\n'));
 }
 async function files(root, dir = root) {
   const result = [];
@@ -56,8 +56,8 @@ export async function auditThirdPartySkill(skillDir) {
   const actual = []; const findings = [];
   for (const file of all) {
     if (file.relative === 'PROVENANCE.json' || file.relative === 'NOTICE') continue;
-    const bytes = await readFile(file.absolute); const hash = digest(bytes); const record = declared.get(file.relative);
-    if (!record || record.sha256 !== hash || record.size !== bytes.length) throw new Error(`${provenancePath}: hash mismatch or undeclared file: ${file.relative}`);
+    const bytes = await readFile(file.absolute); const canonical = Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n')); const hash = digest(bytes); const record = declared.get(file.relative);
+    if (!record || record.sha256 !== hash || record.size !== canonical.length) throw new Error(`${provenancePath}: hash mismatch or undeclared file: ${file.relative}`);
     if (file.relative === 'SKILL.md') {
       if (digest(skillBody(bytes)) !== record.bodySha256) throw new Error(`${provenancePath}: SKILL.md body differs from pinned upstream`);
       if (digest(skillBody(bytes)) !== expectedSource.skillBodySha256) throw new Error(`${provenancePath}: SKILL.md body differs from trusted upstream catalog`);
