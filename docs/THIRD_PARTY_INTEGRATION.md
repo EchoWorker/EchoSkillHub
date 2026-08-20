@@ -503,7 +503,16 @@ Registry 收录、PR 审核、静态扫描和 SHA-256 都不等于安全认证�
 
 `allowedTools` 是实验性声明，不是由 EchoSkillHub 授予的权限票据。
 
-## 14. TypeScript 接入示例
+## 14. 第三方来源审计
+
+EchoSkillHub 收录第三方 Skill 时固定上游 commit，而不是跟踪分支。每个第三方包都必须
+包含上游许可证、根级 `NOTICE` 和严格的 `PROVENANCE.json`，记录来源、commit、tree/blob
+标识、文件 SHA-256 和本地适配。`node scripts/audit-third-party-skill.mjs skills/<slug>`
+只对字节进行被动分析，不执行被审计脚本；它提供 intake evidence，不代表安全认证或权限
+授予。脚本、`allowed-tools`、网络、凭据、部署和费用操作仍必须由接入方按最小权限和用户
+确认处理。
+
+## 15. TypeScript 接入示例
 
 ```ts
 type Category = {
@@ -588,7 +597,7 @@ async function loadCatalog() {
 
 生产实现还必须加上 Schema 校验、缓存原子替换、超时、重试、大小限制和完整性验证，不能直接照搬最小示例作为完整安全实现。
 
-## 15. CLI 接入示例
+## 16. CLI 接入示例
 
 目录查看：
 
@@ -612,7 +621,7 @@ $hash = (Get-FileHash "$env:TEMP\$($skill.slug)-$($skill.latest).zip" -Algorithm
 if ($hash -ne $version.sha256) { throw "SHA-256 mismatch" }
 ```
 
-## 16. 接入测试清单
+## 17. 接入测试清单
 
 ### 16.1 正常流程
 
@@ -650,7 +659,7 @@ if ($hash -ne $version.sha256) { throw "SHA-256 mismatch" }
 - Hub 推荐版本回退时能提示并切回旧版本；
 - Pages 短暂返回跨版本文件时能整体重试。
 
-## 17. 兼容与版本演进
+## 18. 兼容与版本演进
 
 接入方必须把 `schemaVersion` 当作协议版本，而不是忽略字段：
 
@@ -662,7 +671,7 @@ if ($hash -ne $version.sha256) { throw "SHA-256 mismatch" }
 
 URL 中包含 `/v1/`，未来不兼容变更会发布新版本路径，而不是静默改变旧路径语义。
 
-## 18. 最小接入验收标准
+## 19. 最小接入验收标准
 
 一个第三方实现至少满足以下条件才算完成：
 

@@ -61,7 +61,7 @@ export async function collectSkillFiles(skillDir, limits = LIMITS) {
       else {
         if (DENIED.has(entry.name.toLowerCase()) || /(?:~|\.tmp|\.swp|\.bak)$/.test(entry.name.toLowerCase())) throw new Error(`forbidden generated/temporary file: ${relative}`);
         if (EXEC_EXT.has(path.extname(entry.name).toLowerCase())) throw new Error(`native/executable file forbidden: ${relative}`);
-        if (SCRIPT_EXT.has(path.extname(entry.name).toLowerCase()) && !relative.startsWith('scripts/')) throw new Error(`executable script outside scripts/: ${relative}`);
+        if (SCRIPT_EXT.has(path.extname(entry.name).toLowerCase()) && !isScriptDirectory(relative)) throw new Error(`executable script outside approved script directories: ${relative}`);
         if (stat.mode & 0o111) throw new Error(`executable permission forbidden: ${relative}`);
         if (stat.size > limits.fileSize) throw new Error(`file too large: ${relative}`);
         totalSize += stat.size; if (totalSize > limits.totalSize) throw new Error('skill unpacked size limit exceeded');
@@ -75,6 +75,8 @@ export async function collectSkillFiles(skillDir, limits = LIMITS) {
   return files;
 }
 
+function isScriptDirectory(relative) { return relative.startsWith('scripts/') || relative === 'eval-viewer/generate_review.py'; }
+
 export async function validateSkill(skillDir, options = {}) {
   const skill = await readSkill(skillDir); const files = await collectSkillFiles(skillDir, options.limits);
   const roots = files.filter(f => f.relative.toLowerCase() === 'skill.md');
@@ -84,7 +86,7 @@ export async function validateSkill(skillDir, options = {}) {
     for (const [name, magic] of NATIVE_MAGICS) if (hasLeadingMagic(bytes, magic)) throw new Error(`${name} executable content forbidden: ${file.relative}`);
     const text = bytes.toString('utf8').replaceAll('\u0000', '').replace(/^\uFEFF/, '').trimStart();
     for (const [name, pattern] of SECRET_PATTERNS) if (pattern.test(text)) throw new Error(`possible ${name} in ${file.relative}`);
-    if (text.startsWith('#!') && !file.relative.startsWith('scripts/')) throw new Error(`executable script outside scripts/: ${file.relative}`);
+    if (text.startsWith('#!') && !isScriptDirectory(file.relative)) throw new Error(`executable script outside approved script directories: ${file.relative}`);
   }
   return { slug: skill.slug, frontmatter: skill.frontmatter, files, totalSize: files.reduce((n, f) => n + f.size, 0) };
 }

@@ -1,0 +1,12 @@
+This package incorporates frontend-design from Anthropic's public Agent Skills repository.
+
+Upstream repository: https://github.com/anthropics/skills
+Pinned upstream commit: 0a64e398ec6bb34a494f0c347e8ccae53a862f8e
+Upstream directory: skills/frontend-design
+Upstream tree: 0d5b74a14bdf3ebcd64f352d06376a2ef05ed296
+Retrieved: 2026-08-20
+License: Apache-2.0; the complete upstream license text is in LICENSE.txt.
+
+Local adaptation: the SKILL.md body is unchanged. EchoSkillHub metadata adds category, tags, upstream-repository, upstream-commit, and upstream-path. PROVENANCE.json records the complete imported file manifest, upstream Git blob identifiers, and current SHA-256 hashes.
+
+This derivative is independently distributed by EchoWorker. Anthropic names and trademarks are used only to identify the source; this NOTICE does not imply Anthropic endorsement or grant trademark rights.
