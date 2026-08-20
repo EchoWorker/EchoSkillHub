@@ -11,12 +11,12 @@ const SUSPICIOUS = [
   ['credential access', /\b(?:API[_ -]?KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL)\b/i],
   ['environment access', /\b(?:os\.environ|process\.env|\$env:|Get-ChildItem\s+Env:)\b/i]
 ];
-const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+const digest = bytes => createHash('sha256').update(Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n'))).digest('hex');
 function skillBody(bytes) {
   const text = bytes.toString('utf8');
   const match = /^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/.exec(text);
   if (!match) throw new Error('SKILL.md has no frontmatter');
-  return Buffer.from(text.slice(match[0].length));
+  return Buffer.from(text.slice(match[0].length).replace(/\r\n/g, '\n'));
 }
 async function files(root, dir = root) {
   const result = [];
