@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/anthropics/skills",
+    "commit": "0a64e398ec6bb34a494f0c347e8ccae53a862f8e",
+    "path": "skills/frontend-design",
+    "tree": "0d5b74a14bdf3ebcd64f352d06376a2ef05ed296",
+    "license": "Apache-2.0",
+    "retrievedAt": "2026-08-20"
+  },
+  "adaptation": {
+    "kind": "frontmatter-metadata-only",
+    "details": "SKILL.md body is unchanged. EchoSkillHub metadata adds category, tags, upstream-repository, upstream-commit, and upstream-path."
+  },
+  "noticeSha256": "4f37eeed9293218e22a51f45d9b294f5c33f5290268586b6ca479b9cd863ff70",
+  "files": [
+    {
+      "path": "LICENSE.txt",
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "size": 10174,
+      "upstreamBlobSha": "f433b1a53f5b830a205fd2df78e2b34974656c7b",
+      "upstreamSha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "9c654f0035cad2e5d7f9180112c459179d67ca717d0141c299bc010b7bf627ed",
+      "size": 8483,
+      "upstreamBlobSha": "decdff43d05908b4c1fc2cfd2d80fc5743440934",
+      "upstreamSha256": "1608ea77fbb6fc30d13a97d12cfa8ebf31358d40f0dd97beed24829d6b3f45dd",
+      "bodySha256": "0df36fd5b075c15a2948a233edfb5ada7ffe34309ada32b2fd6d248522a4e9a7"
+    }
+  ]
+}

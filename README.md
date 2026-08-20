@@ -67,6 +67,15 @@ specification, but it cannot be published by EchoSkillHub.
 Published versions are immutable. A pull request changing multiple Skills
 applies the same increment to each. Renaming a slug creates a different Skill.
 
+## Third-party source intake
+
+Third-party Skills must use a pinned upstream commit, never a moving branch. Each
+import includes its upstream license, root `NOTICE`, and `PROVENANCE.json` with
+source and file hashes. Run `node scripts/audit-third-party-skill.mjs
+skills/<slug>` before review. Audit findings are intake evidence only: scripts,
+`allowed-tools`, network access, credentials, deployment, and spending still
+require host permissions and user approval.
+
 ## Generated distribution contract
 
 Publishing promotes category and tags to required, strongly typed first-class

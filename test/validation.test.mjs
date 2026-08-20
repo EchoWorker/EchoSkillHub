@@ -43,9 +43,9 @@ test('native executable extension, magic, and misplaced scripts are rejected', a
   const universalLittle = await makeSkill(t, { files: { 'payload.bin': Buffer.from([0xbf, 0xba, 0xfe, 0xca]) } });
   await assert.rejects(validateSkill(universalLittle), /Mach-O universal 64-bit/);
   const powershell = await makeSkill(t, { files: { 'run.ps1': 'Write-Output no' } });
-  await assert.rejects(validateSkill(powershell), /executable script outside scripts/);
+  await assert.rejects(validateSkill(powershell), /executable script outside approved script directories/);
   const script = await makeSkill(t, { files: { 'run.sh': '#!/bin/sh\necho no\n' } });
-  await assert.rejects(validateSkill(script), /executable script outside scripts/);
+  await assert.rejects(validateSkill(script), /executable script outside approved script directories/);
 });
 
 test('symbolic links are rejected when supported by host', async t => {

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "sources": {
+    "frontend-design": {
+      "repository": "https://github.com/anthropics/skills",
+      "commit": "0a64e398ec6bb34a494f0c347e8ccae53a862f8e",
+      "path": "skills/frontend-design",
+      "tree": "0d5b74a14bdf3ebcd64f352d06376a2ef05ed296",
+      "skillBodySha256": "0df36fd5b075c15a2948a233edfb5ada7ffe34309ada32b2fd6d248522a4e9a7"
+    },
+    "skill-creator": {
+      "repository": "https://github.com/anthropics/skills",
+      "commit": "0a64e398ec6bb34a494f0c347e8ccae53a862f8e",
+      "path": "skills/skill-creator",
+      "tree": "3cf9a8db32597ba3e24b584a3d696f4e11c7d7b6",
+      "skillBodySha256": "6ca8f8c6a5192c83e538b89075c915119ffc527e50830c577a429266252db516"
+    }
+  }
+}

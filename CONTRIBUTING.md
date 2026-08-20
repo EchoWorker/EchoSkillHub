@@ -54,6 +54,16 @@ The pull-request workflow is read-only. All required checks and CODEOWNERS revie
 must pass. Deleting a published Skill is not a withdrawal mechanism; contact the
 maintainers for the audited governance process.
 
+## Third-party source intake
+
+External Skills must be imported from a pinned commit, never a moving branch. Each
+third-party Skill must include its upstream license, a root `NOTICE`, and strict
+`PROVENANCE.json` with upstream repository, commit, tree/blob identities, file
+hashes, and every local adaptation. Run `node scripts/audit-third-party-skill.mjs
+skills/<slug>` before review. Audit output is evidence only: scripts,
+`allowed-tools`, network access, credentials, deployment, and spending remain
+subject to the host's least-privilege permissions and user approval.
+
 ## Generated outputs
 
 Category and tags become required first-class fields in generated Manifest v1
